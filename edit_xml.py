@@ -83,6 +83,10 @@ def Find_line_to_Modify(xmlpath, modify_type, name):
                     #print(line[i][14:21])
                     if line[i][14:22] == name:
                         edit_line=cnt
+            if modify_type == 'RBTorsionForce':
+                if line[i][3:17]=='RBTorsionForce': 
+                    #print(line[i][3:17])
+                    edit_line=cnt
             cnt+=1
     return(edit_line)
 
@@ -93,7 +97,7 @@ def Check_Standard_Molecules(xmlpath,moleculedir):
             file=os.path.join(moleculedir,filename)
             Compare_Standard_Mol(file,xmlpath)
 
-def Edit_xml(path,filename,name,clas,element,mass,definition,desc,doi,overrides,overwrite=False):
+def Edit_xml_AtomType(path,filename,name,clas,element,mass,definition,desc,doi,overrides,overwrite=False):
     #if modify is AtomType:
     # inputs
     path = "../switchable_interfaces/atools/atools/forcefields/"
@@ -122,4 +126,36 @@ def Edit_xml(path,filename,name,clas,element,mass,definition,desc,doi,overrides,
                 + '" overrides="' + overrides + '" doi="' + doi + '"/>\n')
 
     Replace_Line(xmlpath, Find_line_to_Modify(xmlpath, modify_type, name), text_to_add)
+    print(filename + ' has been modified.')
+
+def Edit_xml_Dihedral(path,filename,class1,class2,class3,class4,c0,c1,c2,c3,c4,c5,overwrite=False):
+    #if modify is Dihedral:
+    text_to_add = ('  <Proper class1="' + class1 + '" class2="' + class2
+                + '" class3="' + class3 + '" class4="' + class4
+                + '"   c0="' + c0 + '" c1="' + c1
+                + '" c2="' + c2 + '" c3="' + c3
+                + '" c4="' + c4 + '" c5="' + c5 + '"/>\n </RBTorsionForce>\n')
+    # inputs
+    path = "../switchable_interfaces/atools/atools/forcefields/"
+    filename = "edited.xml"
+    xmlpath = os.path.join(path,filename)
+    if not(overwrite):
+        cppath = os.path.join(path,'#backup_'+filename)
+        print(cppath)
+        subprocess.call(['cp', xmlpath, cppath], shell=False)
+    modify_type = 'RBTorsionForce'
+    #class1 = 
+    #class2 = 
+    #class3 = 
+    #class4 = 
+    #class5 = 
+    #c0 = 
+    #c1 = 
+    #c2 = 
+    #c3 = 
+    #c4 = 
+    #c5 = 
+    #find line to edit
+
+    Replace_Line(xmlpath, Find_line_to_Modify(xmlpath, modify_type, class1), text_to_add)
     print(filename + ' has been modified.')
